@@ -2,10 +2,17 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://wzz.blue/categories/</loc>
+    <loc>https://blog.wzz.blue/posts/posts/</loc>
+    <lastmod>2023-04-02T19:21:17+08:00</lastmod>
   </url><url>
-    <loc>https://wzz.blue/tags/</loc>
+    <loc>https://blog.wzz.blue/posts/</loc>
+    <lastmod>2023-04-02T19:21:17+08:00</lastmod>
   </url><url>
-    <loc>https://wzz.blue/</loc>
+    <loc>https://blog.wzz.blue/posts/posts/%E5%8F%91%E5%B8%83%E6%B5%8B%E8%AF%95/</loc>
+    <lastmod>2023-04-02T19:21:17+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.wzz.blue/posts/categories/</loc>
+  </url><url>
+    <loc>https://blog.wzz.blue/posts/tags/</loc>
   </url>
 </urlset>
