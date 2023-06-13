@@ -40,7 +40,7 @@ static struct kprobe write_kprobe = {
 
 ### 网络拦截的实现
 
-关于网络拦截部分可以通过 `netfilter` 来 `hook` 到 **NF_INET_POST_ROUTING** 来实现.
+关于网络拦截部分一开始是想通过 `netfilter`， `hook` 到 **NF_INET_POST_ROUTING** 来实现.
 
 首先拿到 `sk_buff *skb` 数据后我们可以增加一个校验实现仅处理握手包, 这样我们只需要在需要的时候拒绝掉握手包即可, 减少处理的数据量.
 ```c
@@ -55,12 +55,67 @@ if (skb->len != ip_header->ihl * 4 + tcp_header->doff * 4) {
 	return NF_ACCEPT;  
 }
 ```
-接着同样的方式通过 `get_task_comm` 获取当前进程名进行规则比对, 如果不在允许列表则直接 `return NF_DROP;`
+接着同样的方式通过 `get_task_comm` 获取当前进程名进行规则比对, 如果不在允许列表则直接 `return NF_DROP;`，结果遇到了一些问题，比如在 `netfilter` 的钩子函数中， 获取 `current->comm` 当前的进程有时候并不是实际发送网络数据包的进程，经常能获取到内核进程和 `ps` 、`tail` 等一些并不可能发起数据连接的程序，所以实际上在网络数据包处理上下文中，使用 current 宏获取的进程信息可能并非对应于发送数据的用户空间进程，因为网络数据包的处理可能在软中断或 tasklet 上下文中进行。在这些上下文中，current 可能表示触发中断的进程，或者在没有其他任务可运行时可能是空闲进程.所以我更换了处理方式，改为通过 `kprobe` 拦截 `sys_connect` 函数进行处理，将所有不合规的connect请求全部拒绝.
+
+```c
+static struct kprobe connect_kprobe = {
+        .symbol_name = "sys_connect",
+};
+
+```
+
+大概流程如下：
+
+```c
+// 规则未加载则直接放行
+if (NULL == net_protect_list) return 0;
+// 如果读取寄存器失败则直接返回，不继续处理了
+if (0 != copy_from_user(&addr_in, (struct sockaddr __user *) regs->si, min((unsigned long) regs->dx, (unsigned long) sizeof(addr_in)))) return 0;
+// 跳过已经被重置的请求
+if (addr_in.sin_addr.s_addr == htonl(INADDR_LOOPBACK) && addr_in.sin_port == htons(RESET_PORT)) return 0;
+// 只处理TCP并且跳过DNS请求
+if (addr_in.sin_family != AF_INET || 53 == ntohs(addr_in.sin_port)) return 0;
+// 获取进程名
+get_process_name(process_name);
+// 执行拦截规则
+spin_lock(&config_spinlock);
+entry = net_protect_list->head;
+while (NULL != entry) {
+rule = entry->value;
+if (NULL == rule) {
+    entry = entry->next;
+    continue;
+}
+if (NET_RULE_CHECK(process_name, addr_in.sin_addr.s_addr, ntohs(addr_in.sin_port), rule)) {
+    spin_unlock(&config_spinlock);
+    return 0;
+}
+entry = entry->next;
+}
+spin_unlock(&config_spinlock);
+LOG_INFO("[BLOCK-NET|Mode:%d,[%s|%d->%pI4:%u]]", f_mode.netfilter, process_name, current->pid, &addr_in.sin_addr, ntohs(addr_in.sin_port));
+reset_tcp_dst(regs); // 重置TCP目的地和端口，禁止连接
+```
+
+关于重置函数 `reset_tcp_dst` 的实现是通过改变目的地IP和端口来实现的
+
+```c
+void reset_tcp_dst(struct pt_regs *regs)
+{
+    struct sockaddr_in addr_in;
+    addr_in.sin_family = AF_INET;
+    addr_in.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+    addr_in.sin_port = htons(RESET_PORT);
+    if (0 != copy_to_user((struct sockaddr __user *) regs->si, &addr_in, min((unsigned long) regs->dx, (unsigned long)sizeof(addr_in)))) {
+        LOG_ERR("重置TCP目标失败: %s->%d", current->comm, current->pid);
+    }
+}
+```
 
 ### 遇到的一些问题
 
 最开始实现写入保护的时候是想获取到完整的进程二进制路径和进程的参数, 但是在 **Intel CPU** 下从 `current->mm` 中读取参数一直会导致内核崩溃. 这个问题我将内核模块在同样3.10内核版本,同样的虚拟化环境的 **AMD CPU** 中测试一切正常运行, 目前尚未解决该问题, 仅能通过其它方式达到想要功能上的效果.
 
-其次是网络拦截部分, 每次将握手包 **DROP** 掉之后, 都会被 **swapper/** 这个进程重发, 导致即便执行了 **DROP** 操作, 数据包依然能发出, 只是感知上会稍微慢一点, 最后只能通过将未经允许的出口流量对应的进程直接 **kill** 掉来达到想要的效果, 为什么 **swapper** 进程会重发, 这一点目前也未解决.
+其次是网络拦截部分, 最开始通过netfilter实现的方式每次将握手包 **DROP** 掉之后, 都会被 **swapper/** 这个进程重发, 导致即便执行了 **DROP** 操作, 数据包依然能发出, 只是感知上会稍微慢一点, 最后只能通过将未经允许的出口流量对应的进程直接 **kill** 掉来达到想要的效果, 为什么 **swapper** 进程会重发, 这个问题目前看可能是由于Linux内核本身的协议栈工作方式引起的。当网络包经过 `netfilter` 钩子时，可能已经在发送队列中，并且已经安排好了在稍后通过网络接口进行发送(仅仅是猜测).
 
 
