@@ -135,7 +135,7 @@
 用户绑定写入目录 进程绑定写入目录 写入目录白名单 进程网络出口IP和端口控制 此文档仅作为备注,记录一下实现过程及部分细节和问题.
 写入拦截的实现 通过内核kprobe探测技术对 sys_write 函数插入探针拦截所有写入调用.
 static struct kprobe write_kprobe = { .symbol_name = &#34;sys_write&#34;, }; 在探针函数内部实现以下流程:
-获取 pt_regs *regs 寄存器的 di 也就是 sys_write 函数的第一个参数 fd 文件描述符, 通过文件描述符读取要写入的路径 通过 get_task_comm 函数从 current 中获取当前进程名进行规则比对. 仅允许 ** 绑定好关系的用户 / 白名单内的目录 / 进程绑定的目录 ** 执行写入操作, 其它操作全部拒绝 需要注意的是, 写入操作的拒绝不要通过在探针函数内 return 错误码来实现, 基本上内核是会炸的. 替代实现的方式可以将 sys_write 函数的 buffer 和 size 重置, 这样可以做到拒绝写入操作, 同时兼顾了内核的稳定性. void reset_buf_to_empty(struct pt_regs *regs) { regs-&gt;si = EMPTY_BUFF_PTR; regs-&gt;dx = 0; } 网络拦截的实现 关于网络拦截部分可以通过 netfilter 来 hook 到 NF_INET_POST_ROUTING 来实现....</p>
+获取 pt_regs *regs 寄存器的 di 也就是 sys_write 函数的第一个参数 fd 文件描述符, 通过文件描述符读取要写入的路径 通过 get_task_comm 函数从 current 中获取当前进程名进行规则比对. 仅允许 ** 绑定好关系的用户 / 白名单内的目录 / 进程绑定的目录 ** 执行写入操作, 其它操作全部拒绝 需要注意的是, 写入操作的拒绝不要通过在探针函数内 return 错误码来实现, 基本上内核是会炸的. 替代实现的方式可以将 sys_write 函数的 buffer 和 size 重置, 这样可以做到拒绝写入操作, 同时兼顾了内核的稳定性. void reset_buf_to_empty(struct pt_regs *regs) { regs-&gt;si = EMPTY_BUFF_PTR; regs-&gt;dx = 0; } 网络拦截的实现 关于网络拦截部分一开始是想通过 netfilter， hook 到 NF_INET_POST_ROUTING 来实现....</p>
   </div>
   <footer class="entry-footer"><span title='2023-06-10 22:52:12 +0800 CST'>June 10, 2023</span></footer>
   <a class="entry-link" aria-label="post link to 基于Linux3.10内核实现的写入保护和网络出口保护" href="https://blog.wzz.blue/posts/%E5%9F%BA%E4%BA%8Elinux3.10%E5%86%85%E6%A0%B8%E5%AE%9E%E7%8E%B0%E7%9A%84%E5%86%99%E5%85%A5%E4%BF%9D%E6%8A%A4%E5%92%8C%E7%BD%91%E7%BB%9C%E5%87%BA%E5%8F%A3%E4%BF%9D%E6%8A%A4/"></a>
