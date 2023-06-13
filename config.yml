@@ -1,0 +1,12 @@
+baseURL: 'https://blog.wzz.blue'
+languageCode: 'zh-cn'
+title: 'WZZ - smallcham'
+theme: 'papermod'
+
+params:
+  homeInfoParams:
+    Title: "随便写写"
+    Content: "Scribble Space"
+  socialIcons:
+    - name: "github"
+      url: "https://github.com/smallcham"
