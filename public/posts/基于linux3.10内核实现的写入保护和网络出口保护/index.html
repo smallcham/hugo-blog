@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>基于Linux3.10内核实现的写入保护和网络出口保护 | WZZ - smallcham</title>
+<title>基于Linux3.10内核实现的写入保护和网络出口保护 | WZZ</title>
 <meta name="keywords" content="">
 <meta name="description" content="概述 针对于Linux系统中用户权限分配混乱,以及不明原因的黑客提取root权限,危害到部分重要用户的数据, 实现了几种功能:
 用户绑定写入目录 进程绑定写入目录 写入目录白名单 进程网络出口IP和端口控制 此文档仅作为备注,记录一下实现过程及部分细节和问题.
@@ -121,7 +121,7 @@ static struct kprobe write_kprobe = { .symbol_name = &#34;sys_write&#34;, }; 在
   },
   "publisher": {
     "@type": "Organization",
-    "name": "WZZ - smallcham",
+    "name": "WZZ",
     "logo": {
       "@type": "ImageObject",
       "url": "https://blog.wzz.blue/favicon.ico"
@@ -146,7 +146,7 @@ static struct kprobe write_kprobe = { .symbol_name = &#34;sys_write&#34;, }; 在
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="https://blog.wzz.blue" accesskey="h" title="WZZ - smallcham (Alt + H)">WZZ - smallcham</a>
+            <a href="https://blog.wzz.blue" accesskey="h" title="WZZ (Alt + H)">WZZ</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -283,7 +283,7 @@ static struct kprobe write_kprobe = { .symbol_name = &#34;sys_write&#34;, }; 在
     </main>
     
 <footer class="footer">
-    <span>&copy; 2023 <a href="https://blog.wzz.blue">WZZ - smallcham</a></span>
+    <span>&copy; 2023 <a href="https://blog.wzz.blue">WZZ</a></span>
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
