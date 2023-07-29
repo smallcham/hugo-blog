@@ -1,6 +1,6 @@
 baseURL: 'https://blog.wzz.blue'
 languageCode: 'zh-cn'
-title: 'WZZ'
+title: 'smallcham'
 theme: 'papermod'
 
 params:
