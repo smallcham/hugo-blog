@@ -5,8 +5,8 @@ theme: 'papermod'
 
 params:
   homeInfoParams:
-    Title: "随便写写"
-    Content: "smallcham"
+    Title: "/dev/wzz"
+    Content: "随便写写"
   socialIcons:
     - name: "github"
       url: "https://github.com/smallcham"
