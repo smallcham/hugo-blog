@@ -2,20 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/posts/</loc>
+    <loc>https://blog.wzz.blue/posts/</loc>
     <lastmod>2024-04-05T11:03:49+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/</loc>
+    <loc>https://blog.wzz.blue/</loc>
     <lastmod>2024-04-05T11:03:49+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/%E5%9F%BA%E4%BA%8Ecentos73.10%E5%86%85%E6%A0%B8%E7%89%88%E6%9C%AC%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%856.5%E5%86%85%E6%A0%B8%E5%B9%B6%E5%BC%80%E5%90%AFvmlinux/</loc>
+    <loc>https://blog.wzz.blue/posts/%E5%9F%BA%E4%BA%8Ecentos73.10%E5%86%85%E6%A0%B8%E7%89%88%E6%9C%AC%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%856.5%E5%86%85%E6%A0%B8%E5%B9%B6%E5%BC%80%E5%90%AFvmlinux/</loc>
     <lastmod>2024-04-05T11:03:49+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/%E5%9F%BA%E4%BA%8Elinux3.10%E5%86%85%E6%A0%B8%E5%AE%9E%E7%8E%B0%E7%9A%84%E5%86%99%E5%85%A5%E4%BF%9D%E6%8A%A4%E5%92%8C%E7%BD%91%E7%BB%9C%E5%87%BA%E5%8F%A3%E4%BF%9D%E6%8A%A4/</loc>
+    <loc>https://blog.wzz.blue/posts/%E5%9F%BA%E4%BA%8Elinux3.10%E5%86%85%E6%A0%B8%E5%AE%9E%E7%8E%B0%E7%9A%84%E5%86%99%E5%85%A5%E4%BF%9D%E6%8A%A4%E5%92%8C%E7%BD%91%E7%BB%9C%E5%87%BA%E5%8F%A3%E4%BF%9D%E6%8A%A4/</loc>
     <lastmod>2023-06-10T22:52:12+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/categories/</loc>
+    <loc>https://blog.wzz.blue/categories/</loc>
   </url><url>
-    <loc>http://localhost:1313/tags/</loc>
+    <loc>https://blog.wzz.blue/tags/</loc>
   </url>
 </urlset>
