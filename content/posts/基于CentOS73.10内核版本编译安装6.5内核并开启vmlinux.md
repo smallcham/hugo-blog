@@ -60,7 +60,7 @@ make install
 ```
 #### 将编译好的so文件直接拷贝或移动到 /lib64/ 目录
 ```bash
-mv /usr/local/lib/libdwarves.so.1.0.0 /usr/local/lib/libdwarves_emit.so.1.0.0 /usr/local/lib/libdwarves.so.1.0.0 /usr/local/lib/libdwarves_reorganize.so.1.0.0 /usr/local/lib/libdwarves.so.1 /usr/local/lib/libdwarves_emit.so.1 /usr/local/lib/libdwarves_reorganize.so.1 /lib64/
+mv /usr/local/lib/libdwarves_emit.so.1.0.0 /usr/local/lib/libdwarves.so.1.0.0 /usr/local/lib/libdwarves_reorganize.so.1.0.0 /usr/local/lib/libdwarves.so.1 /usr/local/lib/libdwarves_emit.so.1 /usr/local/lib/libdwarves_reorganize.so.1 /lib64/
 ```
 
 #### 测试一下pahole
