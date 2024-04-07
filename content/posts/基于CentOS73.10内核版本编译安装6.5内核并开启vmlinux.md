@@ -37,7 +37,8 @@ yum install -y \
     zlib-devel \
     cmake \
     centos-release-scl devtoolset-8-gcc* \
-    rpm-build
+    rpm-build \
+    scl-utils
 
 yum -y install python3	# 没有python3的需要安装一下,有的话忽略
 ```
