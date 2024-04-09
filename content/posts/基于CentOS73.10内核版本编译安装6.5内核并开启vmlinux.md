@@ -124,7 +124,7 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 ```
 
 #### 2. 打rpm包
-要将高版本的内核源码在CentOS7上会有不少兼容性或者依赖版本的问题需要解决，需要做一些简单的配置
+要将高版本的内核源码在CentOS7上打成rpm包会有不少兼容性或者依赖版本的问题需要解决，需要做一些简单的配置
 - 修改源码内的 `./scripts/package/mkspec` 文件,找到 `BuildRequires: (elfutils-libelf-devel or libelf-devel) flex` 修改为 `BuildRequires: elfutils-libelf-devel flex`
 - 编译rpm包最低版本要求`4.13`，需要升级rpm，执行这一步的时候可能会有一些依赖问题，比如python3或者rpm-sign本身的依赖问题等等，直接yum将冲突的依赖卸载后重试，python3要记得升级完要装回来
   ```Bash
