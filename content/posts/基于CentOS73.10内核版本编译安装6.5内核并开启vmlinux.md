@@ -1,7 +1,7 @@
 ---
 title: "基于CentOS73.10内核版本编译安装6.5内核并开启vmlinux"
 date: 2024-04-05T11:03:49+08:00
-draft: false
+draft: true
 ---
 
 ## 目的
