@@ -142,7 +142,7 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
   ```
 - 执行命令开始编译，编译前要确保内存充足
   ```Bash
-  make rpm-pkg -j 12
+  make rpm-pkg -j 12 # 如果需要压缩rpm大小可以增加 INSTALL_MOD_STRIP=1 参数, 如：make INSTALL_MOD_STRIP=1 rpm-pkg -j 12
   ```
 - 编译完成后可以在 `~/rpmbuild/RPMS/x86_64/` 目录找到三个rpm包，可以通过下面的指令进行安装
   ```Bash 
